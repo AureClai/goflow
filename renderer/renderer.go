@@ -9,7 +9,8 @@ import (
 )
 
 type Renderer struct {
-	container js.Value
+	container      js.Value
+	animationFrame js.Value
 }
 
 func NewRenderer(containerID string) *Renderer {
@@ -30,6 +31,10 @@ func (r *Renderer) Render(vnode *vdom.VNode) {
 }
 
 func (r *Renderer) createDomNode(vnode *vdom.VNode) js.Value {
+	if vnode == nil {
+		return js.Null()
+	}
+
 	document := js.Global().Get("document")
 
 	switch vnode.Type {
@@ -41,7 +46,12 @@ func (r *Renderer) createDomNode(vnode *vdom.VNode) js.Value {
 
 		// Set properties
 		for key, value := range vnode.Props {
-			element.Call("setAttribute", key, value)
+			if key == "style" {
+				// Handle inline styles
+				element.Get("style").Set("cssText", value)
+			} else {
+				element.Call("setAttribute", key, value)
+			}
 		}
 
 		// Add event listeners
@@ -58,11 +68,27 @@ func (r *Renderer) createDomNode(vnode *vdom.VNode) js.Value {
 			if childNode.Truthy() {
 				element.Call("appendChild", childNode)
 			}
-
 		}
 
 		return element
 	}
 
 	return js.Null()
+}
+
+// RequestFrame requests an animation frame for smooth rendering
+func (r *Renderer) RequestFrame() {
+	if r.animationFrame.Truthy() {
+		js.Global().Call("cancelAnimationFrame", r.animationFrame)
+	}
+	
+	r.animationFrame = js.Global().Call("requestAnimationFrame", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		// Frame callback - can be used for post-render operations
+		return nil
+	}))
+}
+
+// GetContainer returns the container element
+func (r *Renderer) GetContainer() js.Value {
+	return r.container
 }

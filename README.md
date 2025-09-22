@@ -15,6 +15,9 @@ A modern front-end web framework for Go that compiles to WebAssembly, bringing t
 - **🛠️ CLI Tools**: Easy project initialization and development workflow
 - **📦 Core Components**: Built-in UI components (Button, Input, List, etc.)
 - **🎨 Flexible Styling**: CSS class and inline style support
+- **✨ Particle System**: Advanced particle effects with physics simulation
+- **🎭 Animation Engine**: Powerful timeline-based animations with easing functions
+- **🎪 Interactive Effects**: Mouse-responsive particle bursts and morphing animations
 
 ## 🚀 Quick Start
 
@@ -139,6 +142,71 @@ list := component.NewList(items).
     })
 ```
 
+### Particle System & Animations
+
+GoFlow includes a powerful particle system and animation engine for creating stunning visual effects:
+
+#### Particle Effects
+
+```go
+import "github.com/AureClai/goflow/animation"
+
+// Create animation engine
+engine := animation.NewAnimationEngine(renderer)
+engine.Start()
+
+// Create particle system
+particles := animation.NewParticleSystem(engine)
+
+// Create particle burst on click
+config := animation.FireworkConfig() // or SparkleConfig(), MagicConfig()
+particles.CreateParticleBurst(x, y, config)
+
+// Set up global click effects
+particles.SetupMouseClickHandler(config)
+```
+
+#### Advanced Animations
+
+```go
+// Create timeline animations
+timeline := animation.NewTimeline(engine)
+
+// Morphing text animation
+anim := animation.NewAnimation().
+    SetElement(element).
+    SetDuration(800 * time.Millisecond).
+    SetEasing(animation.EaseOutBack).
+    Animate("transform", "scale(0)", "scale(1)", "").
+    Animate("opacity", 0.0, 1.0, "").
+    Build()
+
+timeline.AddAnimation(0, anim)
+timeline.Play()
+
+// Pre-built effects
+shake := animation.Shake(engine, element, 10.0, 500*time.Millisecond)
+bounce := animation.Bounce(engine, element, 20.0, 1000*time.Millisecond)
+```
+
+#### Interactive Components
+
+```go
+import "goflow-website/components/effects"
+
+// GitHub morphing button (text transforms to logo on hover)
+githubButton := effects.NewGitHubMorphButton(
+    "https://github.com/yourrepo",
+    engine,
+    particles
+)
+
+// Particle manager for coordinated effects
+particleManager := effects.NewParticleManager(renderer)
+particleManager.InitializeClickEffects()
+particleManager.SetupAdvancedEffects() // Right-click magic, double-click sparkles
+```
+
 ### Custom Components
 
 Create your own components by implementing the `Component` interface:
@@ -238,7 +306,33 @@ Link your CSS files in the HTML template:
 
 ## 📚 Examples
 
-Check out the `test-app` directory for a comprehensive example showcasing all core components.
+### Basic Particle Effects
+
+```go
+// Simple click-to-burst effect
+func main() {
+    r := renderer.NewRenderer("app")
+    engine := animation.NewAnimationEngine(r)
+    engine.Start()
+
+    particles := animation.NewParticleSystem(engine)
+    config := animation.FireworkConfig()
+    particles.SetupMouseClickHandler(config)
+
+    // Your app components here...
+    <-make(chan bool)
+}
+```
+
+### Advanced Interactive Website
+
+Check out the `goflow-website` directory for a comprehensive example showcasing:
+
+- Particle bursts on mouse clicks
+- GitHub button with text-to-logo morphing animation
+- Multiple particle effect presets (Firework, Magic, Sparkle)
+- Advanced hover effects and transitions
+- Responsive design with accessibility support
 
 ## 🤝 Using as a Library
 
@@ -293,13 +387,20 @@ go test ./...
 - Core UI components
 - Event handling
 
-### Phase 3: 🚧 In Progress
+### Phase 3: ✅ Complete
+
+- **Particle System**: Physics-based particle effects with gravity, collision, and lifecycle management
+- **Animation Engine**: Timeline-based animations with advanced easing functions
+- **Interactive Effects**: Mouse-responsive effects, morphing animations, and visual feedback
+- **Advanced Components**: Specialized components like morphing GitHub buttons
+
+### Phase 4: 🚧 In Progress
 
 - Client-side routing
 - Navigation components
 - URL management
 
-### Phase 4: 📋 Planned
+### Phase 5: 📋 Planned
 
 - Hot reload development server
 - File watching and auto-rebuild
@@ -312,6 +413,9 @@ go test ./...
 - CSS-in-Go styling
 - Server-side rendering
 - TypeScript definitions for JS interop
+- 3D particle effects and WebGL integration
+- Audio-reactive animations
+- Gesture recognition and touch effects
 
 ## 🤝 Contributing
 
