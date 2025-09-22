@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/logo-texte-v.png" alt="GoFlow Logo" width="200" margin="10">
+</div>
+
 # GoFlow
 
 A modern front-end web framework for Go that compiles to WebAssembly, bringing the power and simplicity of Go to web development.
